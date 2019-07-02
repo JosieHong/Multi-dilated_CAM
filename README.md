@@ -4,14 +4,14 @@ An implement of CAM(class activation mapping) part of CVPR2018 Revisiting Dilate
 
 LeNet+GAP on CIFAR10. Not finished yet...
 
-# Requirment
+## Requirment
 
 - python 3.6.8
 - pytorch 1.0.1
 - cudnn 7.6.0
 - numpy 1.16.4
 
-# Run
+## Run
 
 ```
 python main.py
