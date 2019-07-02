@@ -40,7 +40,9 @@ class Solver(object):
         self.optimizer = None
         self.scheduler = None
         self.device = None
-        self.cuda = config.cuda
+        self.cuda = False
+        # GPU
+        # self.cuda = config.cuda
         self.train_loader = None
         self.test_loader = None
 
@@ -60,22 +62,7 @@ class Solver(object):
             self.device = torch.device('cpu')
 
         self.model = LeNet().to(self.device)
-        # self.model = AlexNet().to(self.device)
-        # self.model = VGG11().to(self.device)
-        # self.model = VGG13().to(self.device)
         # self.model = VGG16().to(self.device)
-        # self.model = VGG19().to(self.device)
-        # self.model = GoogLeNet().to(self.device)
-        # self.model = resnet18().to(self.device)
-        # self.model = resnet34().to(self.device)
-        # self.model = resnet50().to(self.device)
-        # self.model = resnet101().to(self.device)
-        # self.model = resnet152().to(self.device)
-        # self.model = DenseNet121().to(self.device)
-        # self.model = DenseNet161().to(self.device)
-        # self.model = DenseNet169().to(self.device)
-        # self.model = DenseNet201().to(self.device)
-        # self.model = WideResNet(depth=28, num_classes=10).to(self.device)
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
         self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[75, 150], gamma=0.5)
