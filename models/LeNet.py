@@ -19,6 +19,7 @@ class LeNet(nn.Module):
         x = func.max_pool2d(x, 2) # [100, 16, 5, 5]
         self.feature = x
         gap = torch.squeeze(self.gap(x)) # [100, 16, 1, 1]->[100, 16]
+        self.weight = gap
         x = torch.matmul(gap, self.gap_w) # [100, 16]*[16, 10]->[100, 10]
 
         return x

@@ -9,8 +9,10 @@ import argparse
 
 import sys
 sys.path.append('./')
+
 from models.LeNet import *
 from misc import progress_bar
+from cam import inspect_cam
 
 
 CLASSES = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -96,7 +98,7 @@ class Solver(object):
 
         return train_loss, train_correct / total
 
-    def test(self):
+    def test(self, epoch):
         print("test:")
         self.model.eval()
         test_loss = 0
@@ -107,11 +109,6 @@ class Solver(object):
             for batch_num, (data, target) in enumerate(self.test_loader):
                 data, target = data.to(self.device), target.to(self.device)
                 output = self.model(data)
-
-                # CAM
-                # feature = self.model.feature
-                # print('feature: {}'.format(feature))
-
                 loss = self.criterion(output, target)
                 test_loss += loss.item()
                 prediction = torch.max(output, 1)
@@ -120,6 +117,11 @@ class Solver(object):
 
                 progress_bar(batch_num, len(self.test_loader), 'Loss: %.4f | Acc: %.3f%% (%d/%d)'
                              % (test_loss / (batch_num + 1), 100. * test_correct / total, test_correct, total))
+
+                # inspect cam
+                if epoch % 20 == 0:
+                    print('batch_num = {}, epoch = {}'.format(batch_num, epoch))
+                    inspect_cam(batch_num, epoch, data, self.model.feature, self.model.weight)
 
         return test_loss, test_correct / total
 
@@ -139,7 +141,7 @@ class Solver(object):
             print("\n===> epoch: %d/200" % epoch)
             train_result = self.train()
             print(train_result)
-            test_result = self.test()
+            test_result = self.test(epoch)
             accuracy = max(accuracy, test_result[1])
             if epoch == self.epochs:
                 print("===> BEST ACC. PERFORMANCE: %.3f%%" % (accuracy * 100))

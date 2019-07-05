@@ -2,7 +2,7 @@
 
 An implement of CAM(class activation mapping) part of CVPR2018 Revisiting Dilated Convolution: A Simple Approach for Weakly- and Semi- Supervised Sematic Segmentation.
 
-LeNet+GAP on CIFAR10. Not finished yet...
+LeNet+GAP+CAM on CIFAR10. *Not finished yet...*
 
 # Requirment
 
