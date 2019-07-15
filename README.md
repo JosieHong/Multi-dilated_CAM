@@ -2,7 +2,7 @@
 
 A personal implement of CAM(class activation mapping) part of *CVPR 2018 Revisiting Dilated Convolution: A Simple Approach for Weakly- and Semi- Supervised Sematic Segmentation*.
 
-VGG16+GAP+CAM on CIFAR10. 
+LeNet/VGG16+GAP+CAM on CIFAR10. 
 
 *Not finished yet...*
 
