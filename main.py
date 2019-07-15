@@ -4,19 +4,21 @@ import torch.backends.cudnn as cudnn
 import torchvision
 from torchvision import transforms as transforms
 import numpy as np
+import matplotlib.pyplot as plt
 
 import argparse
 
+import os
+import errno
 import sys
 sys.path.append('./')
 
-from models.LeNet import *
+from models.lenet import *
+from models.vgg import *
 from misc import progress_bar
 from cam import inspect_cam
 
-
 CLASSES = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-
 
 def main():
     parser = argparse.ArgumentParser(description="cifar-10 with PyTorch")
@@ -63,8 +65,8 @@ class Solver(object):
         else:
             self.device = torch.device('cpu')
 
-        self.model = LeNet().to(self.device)
-        # self.model = VGG16().to(self.device)
+        # self.model = LeNet().to(self.device)
+        self.model = VGG('VGG16_modi').to(self.device)
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.lr)
         self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[75, 150], gamma=0.5)
@@ -118,11 +120,20 @@ class Solver(object):
                 progress_bar(batch_num, len(self.test_loader), 'Loss: %.4f | Acc: %.3f%% (%d/%d)'
                              % (test_loss / (batch_num + 1), 100. * test_correct / total, test_correct, total))
 
-                # inspect cam
-                if epoch % 20 == 0:
-                    print('batch_num = {}, epoch = {}'.format(batch_num, epoch))
-                    inspect_cam(batch_num, epoch, data, self.model.feature, self.model.weight)
-
+                # inspect part of cams
+                if batch_num >=5:
+                    continue
+                if epoch % 20 == 1:
+                    for i in range(50):
+                    # for i in range(self.test_batch_size):
+                        cam_out = inspect_cam(data[i], self.model.feature[i], self.model.weight[i])
+                        output_dir = './out/'
+                        self.mkdir_p(output_dir)
+                        plt.imshow(cam_out)
+                        plt.savefig(output_dir + '{}_{}_epoch{}.png'.format(batch_num, i, epoch))
+                        plt.close()
+                        print('Save cam in {}'.format(output_dir + '{}_{}_epoch{}.png'.format(batch_num, i, epoch)))
+        
         return test_loss, test_correct / total
 
     def save(self):
@@ -147,6 +158,14 @@ class Solver(object):
                 print("===> BEST ACC. PERFORMANCE: %.3f%%" % (accuracy * 100))
                 self.save()
 
+    def mkdir_p(self, path):
+        try:
+            os.makedirs(path)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else:
+                raise
 
 if __name__ == '__main__':
     main()

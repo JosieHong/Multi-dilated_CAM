@@ -1,8 +1,10 @@
 # Multi-dilated_CAM
 
-An implement of CAM(class activation mapping) part of CVPR2018 Revisiting Dilated Convolution: A Simple Approach for Weakly- and Semi- Supervised Sematic Segmentation.
+A personal implement of CAM(class activation mapping) part of *CVPR 2018 Revisiting Dilated Convolution: A Simple Approach for Weakly- and Semi- Supervised Sematic Segmentation*.
 
-LeNet+GAP+CAM on CIFAR10. *Not finished yet...*
+VGG16+GAP+CAM on CIFAR10. 
+
+*Not finished yet...*
 
 ## Requirment
 
@@ -18,3 +20,9 @@ python main.py
 ```
 
 If you want to use the version of the GPU, please modify the code at the comment 'GPU'.
+
+## Results
+
+The first line is the results of training 1/200 epoch, and the second line is the results of training 21/200 epoch. 
+
+![out](./img/out.jpg)
